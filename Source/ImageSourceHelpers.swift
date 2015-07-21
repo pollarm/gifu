@@ -40,7 +40,7 @@ private func isPositive(value: Double) -> Bool {
 
 extension CGImageSourceRef {
   var isAnimatedGIF: Bool {
-    let isTypeGIF = UTTypeConformsTo(CGImageSourceGetType(self), kUTTypeGIF)
+    let isTypeGIF = UTTypeConformsTo(CGImageSourceGetType(self)!, kUTTypeGIF)
     let imageCount = CGImageSourceGetCount(self)
     return isTypeGIF != 0 && imageCount > 1
   }
@@ -48,7 +48,7 @@ extension CGImageSourceRef {
   func GIFPropertiesAtIndex(index: UInt) -> GIFProperties? {
     if !isAnimatedGIF { return .None }
 
-    let imageProperties = CGImageSourceCopyPropertiesAtIndex(self, Int(index), nil) as Dictionary
+    let imageProperties = CGImageSourceCopyPropertiesAtIndex(self, Int(index), nil)! as Dictionary
     return imageProperties[String(kCGImagePropertyGIFDictionary)] as? GIFProperties
   }
 }

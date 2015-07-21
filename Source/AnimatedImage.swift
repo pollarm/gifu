@@ -29,7 +29,7 @@ public class AnimatedImage: UIImage {
   }
 
   // MARK: - Initializers
-  required public init(coder aDecoder: NSCoder) {
+  required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
 
@@ -46,6 +46,10 @@ public class AnimatedImage: UIImage {
     pauseAnimation()
   }
 
+  required convenience public init?(imageLiteral name: String) {
+      fatalError("init(imageLiteral:) has not been implemented")
+  }
+
   // MARK: - Factories
   public class func animatedImageWithName(name: String) -> AnimatedImage? {
     let path = NSBundle.mainBundle().bundlePath.stringByAppendingPathComponent(name)
@@ -54,7 +58,7 @@ public class AnimatedImage: UIImage {
 
   public class func animatedImageWithData(data: NSData) -> AnimatedImage {
     let size = UIImage.sizeForImageData(data) ?? CGSizeZero
-    return self(data: data, size: size)
+    return self.init(data: data, size: size)
   }
 
   public class func animatedImageWithName(name: String, size: CGSize) -> AnimatedImage? {
@@ -63,7 +67,7 @@ public class AnimatedImage: UIImage {
   }
 
   public class func animatedImageWithData(data: NSData, size: CGSize) -> AnimatedImage {
-    return self(data: data, size: size)
+    return self.init(data: data, size: size)
   }
 
   // MARK: - Display Link Helpers
@@ -76,13 +80,14 @@ public class AnimatedImage: UIImage {
     let numberOfFrames = Int(CGImageSourceGetCount(imageSource))
     animatedFrames.reserveCapacity(numberOfFrames)
 
-    (animatedFrames, totalDuration) = reduce(0..<numberOfFrames, ([AnimatedFrame](), 0.0)) { accumulator, index in
+    (animatedFrames, totalDuration) = (0..<numberOfFrames).reduce(([AnimatedFrame](), 0.0)) { accumulator, index in
       let accumulatedFrames = accumulator.0
       let accumulatedDuration = accumulator.1
 
-      let frameDuration = CGImageSourceGIFFrameDuration(imageSource, index)
+      let frameDuration = CGImageSourceGIFFrameDuration(imageSource, index: index)
       let frameImageRef = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
-      let frame = UIImage(CGImage: frameImageRef)?.resize(size)
+        
+      let frame = UIImage(CGImage: frameImageRef!).resize(size)
       let animatedFrame = AnimatedFrame(image: frame, duration: frameDuration)
 
       return (accumulatedFrames + [animatedFrame], accumulatedDuration + frameDuration)
@@ -98,7 +103,7 @@ public class AnimatedImage: UIImage {
     if !isAnimated { return }
 
     timeSinceLastFrameChange += min(maxTimeStep, displayLink.duration)
-    var frameDuration = animatedFrames[currentFrameIndex].duration
+    let frameDuration = animatedFrames[currentFrameIndex].duration
 
     if timeSinceLastFrameChange >= frameDuration {
       timeSinceLastFrameChange -= frameDuration

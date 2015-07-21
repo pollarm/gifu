@@ -15,7 +15,7 @@ public extension UIImageView {
   }
 
   // MARK: - Method Overrides
-  override public func displayLayer(layer: CALayer!) {
+  override public func displayLayer(layer: CALayer) {
     layer.contents = animatableImage?.currentFrame?.CGImage
   }
 
