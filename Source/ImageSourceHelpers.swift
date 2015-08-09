@@ -42,7 +42,7 @@ extension CGImageSourceRef {
   var isAnimatedGIF: Bool {
     let isTypeGIF = UTTypeConformsTo(CGImageSourceGetType(self)!, kUTTypeGIF)
     let imageCount = CGImageSourceGetCount(self)
-    return isTypeGIF != 0 && imageCount > 1
+    return isTypeGIF && imageCount > 1
   }
 
   func GIFPropertiesAtIndex(index: UInt) -> GIFProperties? {

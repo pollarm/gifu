@@ -52,7 +52,7 @@ public class AnimatedImage: UIImage {
 
   // MARK: - Factories
   public class func animatedImageWithName(name: String) -> AnimatedImage? {
-    let path = NSBundle.mainBundle().bundlePath.stringByAppendingPathComponent(name)
+    let path = (NSBundle.mainBundle().bundlePath as NSString).stringByAppendingPathComponent(name)
     return animatedImageWithData <^> NSData(contentsOfFile: path)
   }
 
@@ -62,7 +62,7 @@ public class AnimatedImage: UIImage {
   }
 
   public class func animatedImageWithName(name: String, size: CGSize) -> AnimatedImage? {
-    let path = NSBundle.mainBundle().bundlePath.stringByAppendingPathComponent(name)
+    let path = (NSBundle.mainBundle().bundlePath as NSString).stringByAppendingPathComponent(name)
     return curry(animatedImageWithData) <^> NSData(contentsOfFile: path) <*> size
   }
 
