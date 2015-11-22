@@ -46,7 +46,7 @@ public class AnimatedImage: UIImage {
     pauseAnimation()
   }
 
-  required convenience public init?(imageLiteral name: String) {
+  required convenience public init(imageLiteral name: String) {
       fatalError("init(imageLiteral:) has not been implemented")
   }
 
