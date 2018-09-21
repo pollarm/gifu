@@ -25,7 +25,7 @@ class FrameStore {
   let size: CGSize
 
   /// The content mode to use when resizing.
-  let contentMode: UIViewContentMode
+  let contentMode: UIView.ContentMode
 
   /// Maximum number of frames to load at once
   let bufferFrameCount: Int
@@ -82,7 +82,7 @@ class FrameStore {
   ///
   /// - parameter data: The raw GIF image data.
   /// - parameter delegate: An `Animatable` delegate.
-  init(data: Data, size: CGSize, contentMode: UIViewContentMode, framePreloadCount: Int, loopCount: Int) {
+  init(data: Data, size: CGSize, contentMode: UIView.ContentMode, framePreloadCount: Int, loopCount: Int) {
     let options = [String(kCGImageSourceShouldCache): kCFBooleanFalse] as CFDictionary
     self.imageSource = CGImageSourceCreateWithData(data as CFData, options) ?? CGImageSourceCreateIncremental(options)
     self.size = size
@@ -93,7 +93,7 @@ class FrameStore {
 
   // MARK: - Frames
   /// Loads the frames from an image source, resizes them, then caches them in `animatedFrames`.
-  func prepareFrames(_ completionHandler: ((Void) -> Void)? = .none) {
+  func prepareFrames(_ completionHandler: (() -> Void)? = .none) {
     frameCount = Int(CGImageSourceGetCount(imageSource))
     animatedFrames.reserveCapacity(frameCount)
     preloadFrameQueue.async {
